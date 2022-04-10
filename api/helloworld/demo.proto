@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package api.helloworld;
+
+option go_package = "helloworld/api/helloworld;helloworld";
+option java_multiple_files = true;
+option java_package = "api.helloworld";
+
+import "google/api/annotations.proto";
+
+service Demo {
+	rpc CreateDemo (CreateDemoRequest) returns (CreateDemoReply){
+		// 如果删除 annotations.proto 就会报错，google.api.http
+		option (google.api.http) = {
+			post: "/demo"
+			body:"*"
+		};
+	};
+//	rpc UpdateDemo (UpdateDemoRequest) returns (UpdateDemoReply);
+//	rpc DeleteDemo (DeleteDemoRequest) returns (DeleteDemoReply);
+//	rpc GetDemo (GetDemoRequest) returns (GetDemoReply);
+//	rpc ListDemo (ListDemoRequest) returns (ListDemoReply);
+}
+
+// message 之间是可以嵌套的
+
+// name =1 [(validate.rules).string={min_len:5, max_len:50}]
+// but protoc-gen-validate: program not found or is not executable
+message CreateDemoRequest {
+	string name =1;
+}
+
+message CreateDemoReply {
+	int64 id=1;
+	string name=2;
+}

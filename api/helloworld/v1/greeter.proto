@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+// RequestURL: /<package_name>.<version>.<service_name>/{method}
+// requesturl 是指rpc 的请求地址码?
+// service_name 是什么？
+package helloworld.v1;
+
+import "google/api/annotations.proto";
+
+// 多语言特定包名，用于源代码引用
+option go_package = "helloworld/api/helloworld/v1;v1";
+option java_multiple_files = true;
+option java_package = "dev.kratos.api.helloworld.v1";
+option java_outer_classname = "HelloworldProtoV1";
+
+// The greeting service definition.
+// 首字母大写 驼峰定义RPC服务，Greeter 是上面的service_name 吗？
+service Greeter {
+  // 描述该方法的功能
+  // Sends a greeting
+  rpc SayHello (HelloRequest) returns (HelloReply) {
+    // option，代表可有可无的字段，require 是必须的，repeat 可重复变长字段，类似数组
+    option (google.api.http) = {
+      get: "/greeter/{name}",
+      // You could also add some additional APIs
+      additional_bindings {
+        // To define POST API, map body to HelloRequest
+        post: "/v1/greeter/say_hello",
+        body: "*",
+      }
+    };
+  }
+}
+
+// 请求参数
+// The request message containing the user's name.
+// 首字母大写
+// message 声明之后，会有一个类对应，go 的话就对应一个Type
+message HelloRequest {
+  // 每个一个消息体的字段包括三个属性：类型（string），字段名称(name)，字段编号(1)。除类型外其他均不可重复
+  // 用户名字
+  string name = 1;
+
+  // 可以嵌套其他的 message
+}
+
+// 返回的结果
+// The response message containing the greetings
+message HelloReply {
+  // 结果信息
+  string message = 1;
+}
